@@ -1,107 +1,121 @@
-# 🏛️ **CHUNAV SANGAM**
-## Election Synchronization Feasibility & Impact Simulator 🇮🇳
+🏛️ CHUNAV SANGAM
+Impact & Feasibility Analyzer for One Nation One Election 🇮🇳
+🌐 About the Portal — CHUNAV SANGAM
 
-🔗 **Project Links**
-- ▶️ **YouTube Demo Video:** https://youtu.be/_JSM-6XHOKE  
-- 💻 **GitHub Repository:** https://github.com/Algo-Warriors24/CHUNAV-SANGAM
-
----
-
-## 🌐 About the Portal — **CHUNAV SANGAM**
-
-**CHUNAV SANGAM** is a **neutral, data-driven and interactive simulation portal**
-designed to evaluate the **feasibility and impact of synchronized elections**
+CHUNAV SANGAM is a neutral, data-driven and interactive simulation portal
+designed to evaluate the feasibility and impact of synchronized elections
 across India.
 
-🧠 The portal **does NOT support or oppose** the idea of *One Nation One Election*.  
-Instead, it provides an **objective decision-support system** that allows users
-to **simulate, compare, and visualize** multiple election scenarios *before*
+The portal does NOT support or oppose the idea of One Nation One Election.
+Instead, it provides an objective decision-support system that enables users
+to simulate, compare, and visualize multiple election scenarios before
 any real-world implementation.
 
-📊 **CHUNAV SANGAM** transforms a complex constitutional and governance debate into
-**clear, measurable, and visual insights** for better understanding and analysis.
-
----
+CHUNAV SANGAM converts a complex constitutional and governance debate into
+clear, measurable, and visual insights for better understanding and analysis.
 
 ## 👥 Team Members
 
 | Name | Role | Responsibilities |
-|-----|------|------------------|
-| **Sandeep Rai** | Team Lead & System Architect | Vision, system design, scenario logic |
-| **Rishabh Rajwaney** | Research & Policy Analyst | Constitutional research, data sourcing |
-| **Mitali** | UI/UX & Dashboard Designer | Interface design, dashboards, visuals |
-| **Lakshay Valecha** | Data & Simulation Engineer | Data modeling, simulations, charts |
+|------|------|------------------|
+| Sandeep Rai | Team Lead & System Architect | Vision, system design, scenario logic |
+| Rishabh Rajwaney | Research & Policy Analyst | Constitutional research, data sourcing |
+| Mitali | UI/UX & Dashboard Designer | Interface design, dashboards, visuals |
+| Lakshay Valecha | Data & Simulation Engineer | Data modeling, simulations, charts |
 
----
 
-## 🎯 Problem We Address
+🎯 Problem We Address
 
-India conducts elections frequently across states and local bodies, resulting in:
+India conducts elections frequently across states and local bodies, which leads to:
 
-- 💰 High recurring election expenditure  
-- 🧑‍💼 Continuous deployment of administrative & security forces  
-- ⏸️ Governance slowdown due to Model Code of Conduct  
-- 😵 Voter fatigue and inconsistent turnout  
+High recurring election expenditure
 
-❌ Currently, there is **no single digital platform** that enables a structured,
-scenario-based comparison between **synchronized and unsynchronized elections**.
+Continuous deployment of administrative and security forces
 
----
+Governance slowdown due to Model Code of Conduct
 
-## 💡 Our Solution — **CHUNAV SANGAM**
+Voter fatigue and inconsistent participation
 
-**CHUNAV SANGAM** provides a **scenario-based impact simulation system** that allows users to:
+There is currently no single digital platform that allows stakeholders to
+compare synchronized and unsynchronized election systems in a structured manner.
 
-- 🔄 Compare the current election cycle with synchronized elections  
-- 🗺️ Analyze impact at **state-wise and national levels**  
-- 📈 Visualize **cost, manpower, time, and governance efficiency**  
-- ⚠️ Identify **risks, bottlenecks, and readiness requirements**  
+💡 Our Solution — CHUNAV SANGAM
 
----
+CHUNAV SANGAM offers a scenario-based impact simulation platform that allows users to:
 
-## 🧩 Key Modules
+Compare the current election cycle with synchronized elections
 
-### 💸 Financial Impact Simulator
-- Election expenditure comparison  
-- Long-term cost-saving projections  
+Analyze impact at state-wise and national levels
 
-### 🛡️ Administrative Load Analyzer
-- Staff & security force deployment  
-- Model Code of Conduct duration impact  
+Visualize cost, manpower, time, and governance efficiency
 
-### 📊 Governance Efficiency Index
-- Policy delay vs continuity score  
-- Development project interruption analysis  
+Identify risks, bottlenecks, and readiness requirements
 
-### 📜 Constitutional Readiness Mapper
-- Indicative constitutional provisions involved  
-- Amendment complexity & risk indicators (non-legal)  
+All outputs are informational and indicative, ensuring neutrality.
 
-### 🖥️ Interactive Dashboard
-- State-wise heatmaps 🗺️  
-- Scenario sliders 🎚️  
-- Real-time visual outputs 📈  
+🧩 Key Modules
+Financial Impact Simulator
 
----
+Election expenditure comparison
 
-## 🛠️ Technology Stack
+Long-term cost-saving projections
 
-- 🐍 Python (Pandas, NumPy) – data analysis  
-- 📊 Plotly / Charts – visualization  
-- 🌐 Web-based Dashboard – interactive prototype  
-- 📁 Public reports & assumed datasets  
+Administrative Load Analyzer
 
----
+Staff and security deployment analysis
 
-## ⚠️ Disclaimer
+Model Code of Conduct duration impact
 
-**CHUNAV SANGAM** is a **neutral, academic, and research-oriented simulation tool**.  
-It does not promote, oppose, or advocate any political or constitutional stance.  
+Governance Efficiency Index
 
----
+Policy delay vs continuity assessment
 
-## 🚀 Future Scope
+Development project interruption analysis
 
-- 🔗 Integration with real-time election datasets  
-- 🤖 AI-assisted forecasting & scenario modeling  
-- 🏛️ Public policy sandbox for governance analysis  
+Constitutional Readiness Mapper
+
+Indicative constitutional provisions involved
+
+Amendment complexity and risk indicators
+
+Interactive Dashboard
+
+State-wise heatmaps
+
+Scenario sliders
+
+Real-time visual outputs
+
+🛠️ Technology Stack
+
+Python (Pandas, NumPy) – data analysis
+
+Visualization libraries for charts and dashboards
+
+Web-based UI for interactive simulation
+
+Public institutional reports and assumed datasets
+
+📌 Data Sources & Methodology
+
+Election Commission of India
+
+Ministry of Finance (budget and expenditure data)
+
+Public research papers and policy reports
+
+Methodology: scenario-based, assumption-driven simulation
+
+⚠️ Disclaimer
+
+CHUNAV SANGAM is a neutral, academic, and research-oriented simulation tool.
+It does not promote or oppose any political or constitutional position.
+All results are indicative and intended only for analysis and discussion.
+
+🚀 Future Scope
+
+Integration with real-time election datasets
+
+Advanced AI-assisted scenario modeling
+
+Public policy sandbox for governance analysis
