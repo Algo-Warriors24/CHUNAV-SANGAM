@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One Nation One Election Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        [x-cloak] { display: none !important; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    </style>
+</head>
+
+
+<body class="bg-gray-50" x-data="onoeApp()" x-init="initIcons()">
+
+    <div class="min-h-screen">
+        <!-- ====== ONE NATION ONE ELECTION GOV HEADER ====== -->
+<style>
+.onoe-topbar{
+    background:#FFF5E6; /* light orange */
+    border-bottom:2px solid #d9b79f;
+    width:100%;
+    font-family: Arial, sans-serif;
+}
+
+.onoe-inner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 14px;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.onoe-left, .onoe-right{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.onoe-logo{
+    height:42px;
+}
+
+.onoe-title{
+    display:flex;
+    flex-direction:column;
+    line-height:1.1;
+}
+
+.onoe-title h2{
+    margin:0;
+    font-size:20px;
+    font-weight:700;
+}
+
+.onoe-title span{
+    font-size:13px;
+}
+
+.onoe-links{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    font-size:14px;
+}
+</style>
+
+<div class="onoe-topbar sticky top-0 z-50 shadow">
+  <div class="onoe-inner">
+
+    <div class="onoe-left">
+      <img src="https://www.shutterstock.com/image-vector/indian-national-emblem-ashokas-lion-260nw-2535022975.jpg" class="onoe-logo" alt="Ashoka">
+      <div class="onoe-title">
+        <span>भारत सरकार</span>
+        <span>GOVERNMENT OF INDIA</span>
+      </div>
+    </div>
+
+    <div class="onoe-title text-center">
+      <span>एक देश एक चुनाव</span>
+      <h2>ONE NATION ONE ELECTION</h2>
+    </div>
+
+    <div class="onoe-right">
+      <div class="onoe-links">
+        
+       
+        
+      </div>
+
+      
+      <img src="https://img.freepik.com/free-vector/illustration-india-flag_53876-27130.jpg?semt=ais_hybrid&w=740&q=80" class="onoe-logo" alt="india">
+      
+      <span style="color:#d86a12;font-weight:600;"><button 
+      @click="language = (language === 'hindi' ? 'english' : 'hindi'); $nextTick(() => initIcons())"
+      class="px-2 py-1 rounded bg-orange-200/60 hover:bg-orange-300 transition text-xs font-semibold"
+      x-text="language === 'hindi' ? 'English' : 'हिंदी'">
+    </button></span>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- 🌐 NATIONAL IMPACT RUNNING TICKER -->
+<div class="bg-gradient-to-r from-orange-500 via-white to-green-600 text-gray-900 py-2 overflow-hidden font-bold text-sm tracking-wide">
+  <marquee scrollamount="8">
+    🇮🇳 One Nation • One Election — Transforming Democracy ✨ &nbsp;&nbsp; | &nbsp;&nbsp;
+    💰 Massive Savings Boost Public Welfare 💧 &nbsp;&nbsp; | &nbsp;&nbsp;
+    🚀 Faster Development with Continuity ⚙️ &nbsp;&nbsp; | &nbsp;&nbsp;
+    🗳️ Reduced Election Fatigue for Citizens 💪 &nbsp;&nbsp; | &nbsp;&nbsp;
+    📊 Governance Focus > Campaign Mode 🎯 &nbsp;&nbsp; | &nbsp;&nbsp;
+    ⭐ Smarter India — Stronger India — ONOE 🇮🇳
+  </marquee>
+</div>
+
+
+
+
+        <div class="p-4 pb-24">
+            
+            <template x-if="currentScreen === 'home'">
+                <div class="space-y-4">
+                    <div class="bg-gradient-to-br from-orange-50 to-blue-50 rounded-lg p-6 border-l-4 border-orange-500">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div>
+  <img src="https://static.businessworld.in/1713239059_grXctj_elections.jpg"
+       class="w-24 h-24 rounded-full object-cover shadow-md transition-transform duration-200 hover:scale-110"
+       alt="App Image">
+</div>
+
+                            <div>
+                                <h1 class="text-xl font-bold text-gray-900" x-text="t().appTitle"></h1>
+                                <p class="text-sm text-gray-600" x-text="t().appSubtitle"></p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-600 bg-white/70 p-3 rounded border-l-2 border-blue-500">
+                            <i data-lucide="info" class="w-4 h-4 inline mr-1"></i>
+                            <span x-text="t().disclaimer"></span>
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-white rounded-lg p-4 shadow border border-gray-200">
+                            <div class="flex items-center gap-2 mb-2">
+                                <i data-lucide="trending-up" class="w-5 h-5 text-green-600"></i>
+                                <p class="text-xs text-gray-600" x-text="t().costSaving"></p>
+                            </div>
+                            
+                            <p class="text-2xl font-bold text-green-700" x-text="'₹' + metrics().saving"></p>
+                            <p class="text-xs text-gray-500" x-text="t().crores"></p>
+                        </div>
+                        <div class="bg-white rounded-lg p-4 shadow border border-gray-200">
+                            <div class="flex items-center gap-2 mb-2">
+                                <i data-lucide="bar-chart-3" class="w-5 h-5 text-blue-600"></i>
+                                <p class="text-xs text-gray-600" x-text="t().adminScore"></p>
+                            </div>
+                            
+                            <p class="text-2xl font-bold text-blue-700" x-text="metrics().adminScore"></p>
+                            <p class="text-xs text-gray-500">/ 100</p>
+                        </div>
+                        <div class="bg-white rounded-lg p-4 shadow border border-gray-200">
+                            <div class="flex items-center gap-2 mb-2">
+                                <i data-lucide="clock" class="w-5 h-5 text-orange-600"></i>
+                                <p class="text-xs text-gray-600" x-text="t().syncIndex"></p>
+                            </div>
+                            <p class="text-2xl font-bold text-orange-700" x-text="metrics().syncIndex"></p>
+                            <p class="text-xs text-gray-500">/ 100</p>
+                        </div>
+                        <div class="bg-white rounded-lg p-4 shadow border border-gray-200">
+                            <div class="flex items-center gap-2 mb-2">
+                                <i data-lucide="shield" class="w-5 h-5 text-purple-600"></i>
+                                <p class="text-xs text-gray-600" x-text="t().govContinuity"></p>
+                            </div>
+                            <p class="text-2xl font-bold text-purple-700" x-text="metrics().govContinuity"></p>
+                            <p class="text-xs text-gray-500">/ 100</p>
+                        </div>
+                    </div>
+
+                    <button @click="changeScreen('financial')" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white py-4 rounded-lg font-semibold shadow-lg flex items-center justify-center gap-2 hover:from-orange-600 hover:to-orange-700 transition-all">
+                        <span x-text="t().startSim"></span>
+                        <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                    </button>
+                    
+
+                   
+                    <div class="space-y-4">
+
+ <div class="space-y-4 mt-4">
+
+    <!-- 1️⃣ JANMAT PULSE -->
+    <div @click="window.location.href='Janmat-pulse.html'"
+         class="flex items-center bg-blue-50 rounded-xl p-4 shadow hover:shadow-lg border-l-4 border-blue-400 cursor-pointer transition">
+        
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWlxvtnHIj6VHmEsj__WI2V0EXRzz-EyiHBA&s"
+             class="w-28 h-24 object-cover rounded-lg">
+
+        <div class="ml-4">
+            <p class="text-lg font-bold text-gray-900">
+                <span x-show="language === 'english'">Janmat Pulse</span>
+                <span x-show="language === 'hindi'">जनमत पल्स</span>
+            </p>
+            <p class="text-sm font-semibold text-gray-700">
+                <span x-show="language === 'english'">Nationwide public opinion tracker</span>
+                <span x-show="language === 'hindi'">देशभर की जनता की राय</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- 2️⃣ SECURITY & LOGISTICS -->
+    <div @click="window.location.href='security.html'"
+         class="flex items-center bg-green-50 rounded-xl p-4 shadow hover:shadow-lg border-l-4 border-green-400 cursor-pointer transition">
+        
+        <img src="https://t3.ftcdn.net/jpg/03/15/66/40/360_F_315664059_3U5rIfjwAR5b2rIlJdchwl5JsbE8uljn.jpg"
+             class="w-28 h-24 object-cover rounded-lg">
+
+        <div class="ml-4">
+            <p class="text-lg font-bold text-gray-900">
+                <span x-show="language === 'english'">Security & Logistics</span>
+                <span x-show="language === 'hindi'">सुरक्षा व संसाधन</span>
+            </p>
+            <p class="text-sm font-semibold text-gray-700">
+                <span x-show="language === 'english'">Force & resource optimization</span>
+                <span x-show="language === 'hindi'">बल व साधन की बचत</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- 3️⃣ VOTER AWARENESS MAP -->
+    <div @click="window.location.href='awareness.html'"
+         class="flex items-center bg-orange-50 rounded-xl p-4 shadow hover:shadow-lg border-l-4 border-orange-400 cursor-pointer transition">
+        
+        <img src="https://wpblogassets.paytm.com/paytmblog/uploads/2024/07/Blog_Generic_How-to-Apply-and-Get-Duplicate-Voter-ID-Card_-1-800x500.jpg"
+             class="w-28 h-24 object-cover rounded-lg">
+
+        <div class="ml-4">
+            <p class="text-lg font-bold text-gray-900">
+                <span x-show="language === 'english'">Voter Awareness Map</span>
+                <span x-show="language === 'hindi'">मतदाता जागरूकता मानचित्र</span>
+            </p>
+            <p class="text-sm font-semibold text-gray-700">
+                <span x-show="language === 'english'">State-wise readiness visualization</span>
+                <span x-show="language === 'hindi'">राज्यों की तैयारी स्थिति</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- 4️⃣ SAVINGS USAGE -->
+    <div @click="window.location.href='savings.html'"
+         class="flex items-center bg-purple-50 rounded-xl p-4 shadow hover:shadow-lg border-l-4 border-purple-400 cursor-pointer transition">
+        
+        <img src="https://im.rediff.com/news/2025/feb/25welfare-funds1.jpg"
+             class="w-28 h-24 object-cover rounded-lg">
+
+        <div class="ml-4">
+            <p class="text-lg font-bold text-gray-900">
+                <span x-show="language === 'english'">Savings Usage</span>
+                <span x-show="language === 'hindi'">बचत का उपयोग</span>
+            </p>
+            <p class="text-sm font-semibold text-gray-700">
+                <span x-show="language === 'english'">Savings moved to public welfare</span>
+                <span x-show="language === 'hindi'">बचत जनता कल्याण में खर्च</span>
+            </p>
+        </div>
+    </div>
+
+</div>
+<!-- 🔥 India Hero Map Block -->
+<div class="mt-8 bg-gradient-to-br from-orange-50 to-blue-50 rounded-xl shadow-lg p-6 md:p-10">
+
+  <div class="grid grid-cols-1 md:grid-cols-2 items-center gap-6">
+
+    <!-- ✨ LEFT TEXT -->
+    <div>
+      <h2 class="text-3xl md:text-4xl font-extrabold leading-tight text-gray-900">
+        <span x-show="language === 'english'">
+          Unified Elections.<br>
+          Stronger Governance.<br>
+          Empowered India.
+        </span>
+        <span x-show="language === 'hindi'">
+          एकीकृत चुनाव।<br>
+          सशक्त शासन।<br>
+          विकसित भारत।
+        </span>
+      </h2>
+
+      <p class="mt-4 text-sm md:text-base font-semibold text-gray-700 leading-relaxed">
+        <span x-show="language === 'english'">
+          One Nation One Election aims to simplify democratic processes,
+          reduce costs, and ensure uninterrupted development across the country.
+          Your data-powered analysis begins here.
+        </span>
+        <span x-show="language === 'hindi'">
+          एक देश एक चुनाव व्यवस्था लोकतंत्र को सरल बनाने, खर्च कम करने और
+          पूरे देश में विकास को निरंतर बनाए रखने का प्रयास है।
+          यहाँ आपका डेटा आधारित विश्लेषण शुरू होता है।
+        </span>
+      </p>
+    </div>
+
+    <!-- 🌍 RIGHT MAP IMAGE -->
+    <div class="flex justify-center">
+      <img src="https://cdn.create.vista.com/api/media/small/254221514/stock-vector-indian-people-hand-with-voting-sign-showing-general-election-of-india"
+           class="w-full max-w-lg h-auto object-contain drop-shadow">
+    </div>
+
+  </div>
+ 
+
+
+  <!-- 🌐 IMPACT FLOW CHART SECTION -->
+<div class="mt-8 rounded-xl shadow-lg p-6 md:p-10 border border-gray-200
+            bg-gradient-to-b from-[#FF9933]/20 via-white/40 to-[#128807]/20">
+
+  <h2 class="text-2xl font-extrabold text-gray-900 mb-6 text-center">
+    <span x-show="language === 'english'">ONOE Track</span>
+    <span x-show="language === 'hindi'">एक राष्ट्र एक चुनाव कैसे असर लाता है</span>
+  </h2>
+
+  <div class="space-y-6">
+
+    <!-- 1 -->
+    <div class="flex flex-col items-center text-center">
+      <div class="bg-blue-50 border-l-4 border-blue-500 px-6 py-4 rounded-lg shadow w-full md:w-3/4">
+        <p class="text-lg font-bold text-blue-800">📊 Data Collection & Simulation</p>
+        <p class="text-sm font-medium text-gray-700">(Elections, Cost, Citizens, Administration)</p>
+      </div>
+    </div>
+
+    <div class="flex justify-center"><p class="text-3xl">⬇️</p></div>
+
+    <!-- 2 -->
+    <div class="flex flex-col items-center text-center">
+      <div class="bg-purple-50 border-l-4 border-purple-500 px-6 py-4 rounded-lg shadow w-full md:w-3/4">
+        <p class="text-lg font-bold text-purple-800">🤖 AI Insight & Scenario Testing</p>
+        <p class="text-sm font-medium text-gray-700">(Predicts outcomes for multiple ONOE models)</p>
+      </div>
+    </div>
+
+    <div class="flex justify-center"><p class="text-3xl">⬇️</p></div>
+
+    <!-- 3 -->
+    <div class="flex flex-col items-center text-center">
+      <div class="bg-green-50 border-l-4 border-green-500 px-6 py-4 rounded-lg shadow w-full md:w-3/4">
+        <p class="text-lg font-bold text-green-800">📉 Lower Cost, 📈 Higher Efficiency</p>
+        <p class="text-sm font-medium text-gray-700">(Saving 20,000+ crores, fewer MCC blocks)</p>
+      </div>
+    </div>
+
+    <div class="flex justify-center"><p class="text-3xl">⬇️</p></div>
+
+    <!-- 4 -->
+    <div class="flex flex-col items-center text-center">
+      <div class="bg-orange-50 border-l-4 border-orange-500 px-6 py-4 rounded-lg shadow w-full md:w-3/4">
+        <p class="text-lg font-bold text-orange-800">🧱 Better Governance & Faster Projects</p>
+        <p class="text-sm font-medium text-gray-700">(Continuous development, no frequent election halts)</p>
+      </div>
+    </div>
+
+    <div class="flex justify-center"><p class="text-3xl">⬇️</p></div>
+
+    <!-- 5 -->
+    <div class="flex flex-col items-center text-center">
+      <div class="bg-yellow-50 border-l-4 border-yellow-500 px-6 py-4 rounded-lg shadow w-full md:w-3/4">
+        <p class="text-lg font-bold text-yellow-800">🚀 Nation-First Growth</p>
+        <p class="text-sm font-medium text-gray-700">(More investment, development & stability)</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+</div>
+
+
+</div>
+
+                </div>
+            </template>
+
+            <template x-if="currentScreen === 'financial'">
+                <div class="space-y-4">
+                    <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                        <i data-lucide="calculator" class="w-5 h-5 text-blue-600"></i>
+                        <span x-text="t().financial"></span>
+                    </h2>
+                    <div class="bg-white rounded-lg p-4 shadow border border-gray-200">
+                        <p class="text-sm font-semibold text-gray-700 mb-3" x-text="t().scenarioBuilder"></p>
+                        <div class="flex gap-2 mb-4">
+                            <button @click="scenarioType = 'full'" :class="scenarioType === 'full' ? 'bg-blue-600 text-white shadow' : 'bg-gray-100 text-gray-700'" class="flex-1 py-2 px-3 rounded text-xs font-medium transition-all" x-text="t().fullSync"></button>
+                            <button @click="scenarioType = 'partial'" :class="scenarioType === 'partial' ? 'bg-blue-600 text-white shadow' : 'bg-gray-100 text-gray-700'" class="flex-1 py-2 px-3 rounded text-xs font-medium transition-all" x-text="t().partialSync"></button>
+                            <button @click="scenarioType = 'current'" :class="scenarioType === 'current' ? 'bg-blue-600 text-white shadow' : 'bg-gray-100 text-gray-700'" class="flex-1 py-2 px-3 rounded text-xs font-medium transition-all" x-text="t().current"></button>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg p-4 shadow border border-gray-200">
+                        <p class="text-sm font-semibold text-gray-700 mb-3" x-text="t().estimatedCost"></p>
+                        <div class="space-y-3">
+                            <div>
+                                <div class="flex justify-between text-xs mb-1">
+                                    <span class="text-gray-600" x-text="t().currentSystem"></span>
+                                    <span class="font-semibold text-gray-900" x-text="'₹' + metrics().baselineCost + ' ' + t().crores"></span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-red-500 h-2 rounded-full" style="width: 100%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs mb-1">
+                                    <span class="text-gray-600" x-text="t().synchronized"></span>
+                                    <span class="font-semibold text-green-700" x-text="'₹' + metrics().syncCost + ' ' + t().crores"></span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-green-500 h-2 rounded-full" :style="'width: ' + (metrics().syncCost / metrics().baselineCost * 100) + '%'"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600" x-text="t().longTermSaving + ' (10 ' + t().years + ')'"></span>
+                                <span class="text-xl font-bold text-green-600" x-text="'₹' + (metrics().saving * 2) + ' ' + t().crores"></span>
+                            </div>
+
+
+
+                            <!-- Savings Allocation -->
+<div class="grid md:grid-cols-3 gap-4">
+  <div class="bg-white rounded-lg shadow p-4 border border-gray-200 text-center">
+    <p class="text-4xl mb-2">🏥</p>
+    <p class="font-bold text-gray-900">Health Infra</p>
+    <p class="text-xs font-medium text-gray-600">Hospitals + Vaccination + PHCs</p>
+    <p class="mt-1 text-green-700 text-sm font-bold">₹9000 Cr</p>
+  </div>
+
+  <div class="bg-white rounded-lg shadow p-4 border border-gray-200 text-center">
+    <p class="text-4xl mb-2">🎓</p>
+    <p class="font-bold text-gray-900">Education Boost</p>
+    <p class="text-xs font-medium text-gray-600">Schools + Smart Classrooms</p>
+    <p class="mt-1 text-green-700 text-sm font-bold">₹6500 Cr</p>
+  </div>
+
+  <div class="bg-white rounded-lg shadow p-4 border border-gray-200 text-center">
+    <p class="text-4xl mb-2">🚆</p>
+    <p class="font-bold text-gray-900">Infra & Transport</p>
+    <p class="text-xs font-medium text-gray-600">Roads, Metro, Rural Links</p>
+    <p class="mt-1 text-green-700 text-sm font-bold">₹7000 Cr</p>
+  </div>
+</div>
+<div class="bg-white rounded-lg shadow p-6 border border-gray-200 space-y-2">
+  <h3 class="font-bold text-gray-900 flex items-center gap-2 text-lg">
+    🌍 What ONOE Enables
+  </h3>
+  <p class="text-sm text-gray-700">✔ ₹20,000 Cr freed every cycle</p>
+  <p class="text-sm text-gray-700">✔ 5 years continuous governance</p>
+  <p class="text-sm text-gray-700">✔ No repeat campaign cost for parties</p>
+  <p class="text-sm text-gray-700">✔ 25–30% less MCC disruption</p>
+</div>
+<div class="bg-gradient-to-r from-green-50 to-white rounded-lg shadow p-5 border border-green-300">
+  <h3 class="font-bold text-lg text-green-800 mb-2">👨‍👩‍👦 Citizens Benefit</h3>
+  <ul class="space-y-1 text-sm text-gray-700">
+    <li>• More funds into development, not elections</li>
+    <li>• Faster road, school & hospital completion</li>
+    <li>• Less election fatigue + less travel chaos</li>
+    <li>• Safety burden reduces on police forces</li>
+  </ul>
+</div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+
+
+            <template x-if="currentScreen === 'admin'">
+                <div class="space-y-4">
+                    <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                        <i data-lucide="users" class="w-5 h-5 text-purple-600"></i>
+                        <span x-text="t().admin"></span>
+                    </h2>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-white rounded-lg p-4 shadow border border-gray-200">
+                            <p class="text-xs text-gray-600 mb-2" x-text="t().currentSystem"></p>
+                            <p class="text-2xl font-bold text-red-600">245</p>
+                            <p class="text-xs text-gray-500" x-text="t().days + ' MCC'"></p>
+                        </div>
+                        <div class="bg-white rounded-lg p-4 shadow border border-gray-200">
+                            <p class="text-xs text-gray-600 mb-2" x-text="t().synchronized"></p>
+                            <p class="text-2xl font-bold text-green-600">45</p>
+                            <p class="text-xs text-gray-500" x-text="t().days + ' MCC'"></p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg p-4 shadow border border-gray-200 space-y-4">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm text-gray-700" x-text="t().staffDeployment"></span>
+                                <span class="text-sm font-semibold text-green-700">-62%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3"><div class="bg-green-500 h-3 rounded-full" style="width: 38%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm text-gray-700" x-text="t().securityForces"></span>
+                                <span class="text-sm font-semibold text-green-700">-58%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3"><div class="bg-green-500 h-3 rounded-full" style="width: 42%"></div></div>
+                        </div>
+
+
+                        <!-- 🌟 Election Management Burden Overview -->
+<div class="bg-white rounded-xl shadow p-6 border border-gray-200">
+  <h3 class="font-bold text-lg flex items-center gap-2 mb-3">
+    🏛️ <span x-text="language==='hindi'?'प्रशासनिक बोझ':'Administrative Burden'"></span>
+  </h3>
+
+  <p class="text-sm text-gray-700 mb-4" x-show="language==='english'">
+    Conducting elections repeatedly requires massive manpower, logistics and coordination efforts.
+  </p>
+  <p class="text-sm text-gray-700 mb-4" x-show="language==='hindi'">
+    बार-बार चुनाव होने से प्रशासन, संसाधन और कर्मचारियों पर बड़ा दबाव पड़ता है।
+  </p>
+
+  <ul class="space-y-2 text-sm font-medium">
+    <li>📦 <span x-show="language==='english'">Multiple ballot + EVM setup</span><span x-show="language==='hindi'"> बार-बार ईवीएम/मतपत्र की व्यवस्था </span></li>
+    <li>🚓 <span x-show="language==='english'">High police deployment</span><span x-show="language==='hindi'"> पुलिस बल की भारी तैनाती </span></li>
+    <li>🚌 <span x-show="language==='english'">Movement of staff between states</span><span x-show="language==='hindi'"> कर्मचारियों की राज्यों में अदला-बदली </span></li>
+    <li>📢 <span x-show="language==='english'">Training & awareness repeat cycles</span><span x-show="language==='hindi'"> प्रशिक्षण और जागरूकता के कई दौर </span></li>
+  </ul>
+</div>
+
+<!-- 💼 Resource & Workforce -->
+<div class="bg-white rounded-xl shadow p-6 border border-gray-200">
+  <h3 class="font-bold text-lg flex items-center gap-2 mb-3">
+    👥 <span x-text="language==='hindi'?'कर्मचारियों की आवश्यकता':'Workforce Demand'"></span>
+  </h3>
+
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
+    <div>
+      <p class="text-3xl">🧑‍💼</p>
+      <p class="font-bold text-gray-800">30 Lakh</p>
+      <p class="text-xs text-gray-600" x-text="language==='hindi'?'चुनाव अधिकारी':'Election Staff'"></p>
+    </div>
+    <div>
+      <p class="text-3xl">🚨</p>
+      <p class="font-bold text-gray-800">15 Lakh</p>
+      <p class="text-xs text-gray-600" x-text="language==='hindi'?'सुरक्षा बल':'Security Forces'"></p>
+    </div>
+    <div>
+      <p class="text-3xl">📚</p>
+      <p class="font-bold text-gray-800">3 Lakh</p>
+      <p class="text-xs text-gray-600" x-text="language==='hindi'?'प्रशिक्षण स्टाफ':'Training Teams'"></p>
+    </div>
+  </div>
+</div>
+
+<!-- 🚀 How Synchronization Helps -->
+<div class="bg-gradient-to-r from-blue-50 to-white rounded-xl shadow p-6 border border-blue-300">
+  <h3 class="font-bold text-lg flex items-center gap-2 mb-3">
+    🚀 <span x-text="language==='hindi'?'समाधान — समन्वित चुनाव':'Solution — Unified Elections'"></span>
+  </h3>
+
+  <ul class="space-y-2 text-sm font-medium text-gray-700">
+    <li>⭐ <span x-show="language==='english'">Single large deployment instead of many small ones</span><span x-show="language==='hindi'"> बार-बार नहीं, सिर्फ एक बड़े स्तर पर संचालन </span></li>
+    <li>📉 <span x-show="language==='english'">Reduction in police + paramilitary pressure</span><span x-show="language==='hindi'"> पुलिस व अर्धसैनिक बल का बोझ घटेगा </span></li>
+    <li>🗳️ <span x-show="language==='english'">Training cost falls drastically</span><span x-show="language==='hindi'"> प्रशिक्षण पर खर्च बहुत कम होगा </span></li>
+    <li>🌏 <span x-show="language==='english'">Movement of EVMs reduced 60%+</span><span x-show="language==='hindi'"> ईवीएम की आवाजाही में 60% तक कमी </span></li>
+  </ul>
+</div>
+
+
+
+                    </div>
+                </div>
+            </template>
+
+            
+                       
+
+            <template x-if="currentScreen === 'governance'">
+                <div class="space-y-4">
+                    <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                        <i data-lucide="trending-up" class="w-5 h-5 text-green-600"></i>
+                        <span x-text="t().governance"></span>
+                    </h2>
+                    <div class="bg-white rounded-lg p-4 shadow border border-gray-200 mb-4">
+  <p class="text-xs text-gray-500 mb-1 text-center">
+    Overall ONOE Readiness
+  </p>
+
+  <p class="text-2xl font-bold text-center"
+     :class="
+       metrics().readinessLevel === 'High Readiness'
+         ? 'text-green-600'
+         : metrics().readinessLevel === 'Moderate Readiness'
+         ? 'text-yellow-600'
+         : 'text-red-600'
+     "
+     x-text="metrics().readinessLevel">
+  </p>
+
+  <p class="mt-3 text-sm text-center text-gray-700"
+     x-text="metrics().decisionText">
+  </p>
+</div>
+
+                    <div class="bg-white rounded-lg p-6 shadow border border-gray-200">
+                        <div class="text-center mb-4">
+                            <p class="text-sm text-gray-600 mb-2" x-text="t().overallEfficiency"></p>
+                            <div class="relative inline-block">
+                                <svg class="w-32 h-32">
+                                    <circle cx="64" cy="64" r="56" fill="none" stroke="#e5e7eb" stroke-width="8" />
+                                    <circle cx="64" cy="64" r="56" fill="none" stroke="#10b981" stroke-width="8" 
+                                        stroke-dasharray="351.85" 
+                                        :stroke-dashoffset="351.85 * (1 - metrics().adminScore / 100)"
+                                        transform="rotate(-90 64 64)" stroke-linecap="round" />
+                                </svg>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <span class="text-3xl font-bold text-green-600" x-text="metrics().adminScore"></span>
+                                </div>
+
+                                
+                            </div>
+                        </div>
+
+
+                        <!-- 🏛️ Why Governance Improves with ONOE -->
+<div class="bg-white rounded-xl shadow p-6 border border-gray-200">
+  <h3 class="font-bold text-lg flex items-center gap-2 mb-3">
+    🏛️ <span x-text="language === 'hindi' ? 'शासन दक्षता क्यों बढ़ती है:' : 'Why Governance Improves:'"></span>
+  </h3>
+
+  <ul class="space-y-2 text-sm font-medium">
+    <li>🗳️ <span x-show="language==='english'">Less time campaigning, more time governing</span><span x-show="language==='hindi'"> चुनाव कम, शासन अधिक समय मिलता है </span></li>
+    <li>⏳ <span x-show="language==='english'">Policies don’t pause due to MCC</span><span x-show="language==='hindi'"> नीति/लाभ योजनाओं में रुकावट नहीं </span></li>
+    <li>🚧 <span x-show="language==='english'">Projects finish faster with steady work</span><span x-show="language==='hindi'"> परियोजनाएँ लगातार चलती हैं, जल्दी पूरी होती हैं </span></li>
+    <li>🏫 <span x-show="language==='english'">Focus back on development — roads, schools, digital</span><span x-show="language==='hindi'"> फोकस सड़क, शिक्षा, डिजिटल विकास पर लौटता है </span></li>
+  </ul>
+</div>
+
+<!-- 🔁 Current vs Unified Governance Cycle -->
+<div class="bg-gradient-to-r from-yellow-50 to-white rounded-xl shadow p-6 border border-yellow-300">
+  <h3 class="font-bold text-lg flex items-center gap-2 mb-4">
+    🔁 <span x-text="language === 'hindi' ? 'वर्तमान बनाम एकीकृत सरकार' : 'Current vs Unified Governance'"></span>
+  </h3>
+
+  <div class="grid grid-cols-2 gap-4 text-center">
+    <div>
+      <p class="text-3xl">📉</p>
+      <p class="font-bold text-gray-800" x-text="language==='hindi'?'असतत':'Disrupted'"></p>
+      <p class="text-xs text-gray-600" x-show="language==='english'">Frequent election code freezes projects</p>
+      <p class="text-xs text-gray-600" x-show="language==='hindi'">आचार संहिता बार-बार रोक लगाती है</p>
+    </div>
+    <div>
+      <p class="text-3xl">📈</p>
+      <p class="font-bold text-gray-800" x-text="language==='hindi'?'निरंतर शासन':'Continuous Governance'"></p>
+      <p class="text-xs text-gray-600" x-show="language==='english'">Work continues without interruption</p>
+      <p class="text-xs text-gray-600" x-show="language==='hindi'">काम बिना रुके जारी रहता है</p>
+    </div>
+  </div>
+</div>
+
+<!-- 🌟 National Development Boost -->
+<div class="bg-white rounded-xl shadow p-6 border border-gray-200">
+  <h3 class="font-bold text-lg flex items-center gap-2 mb-3">
+    🌟 <span x-text="language === 'hindi' ? 'राष्ट्रीय विकास में वृद्धि' : 'Boost to National Development'"></span>
+  </h3>
+
+  <ul class="space-y-2 text-sm font-medium text-gray-700">
+    <li>📈 <span x-show="language==='english'">GDP growth impact improves 0.5–1.0%</span><span x-show="language==='hindi'">GDP में 0.5–1.0% बढ़ावा संभव</span></li>
+    <li>💼 <span x-show="language==='english'">Employment programs don’t stall</span><span x-show="language==='hindi'">रोज़गार योजनाएँ रुके बिना चलती हैं</span></li>
+    <li>🧱 <span x-show="language==='english'">Public infrastructure expands faster</span><span x-show="language==='hindi'">सार्वजनिक ढांचा तेजी से विकसित होता है</span></li>
+    <li>💡 <span x-show="language==='english'">More focus on innovation & Reform</span><span x-show="language==='hindi'">नवाचार और सुधार पर अधिक ध्यान</span></li>
+  </ul>
+</div>
+
+<!-- 🧮 Net Governance Score Summary -->
+<div class="bg-gradient-to-r from-green-50 to-white rounded-xl shadow p-6 border border-green-300">
+  <h3 class="font-bold text-lg flex items-center gap-2 mb-4">
+    🧮 <span x-text="language === 'hindi' ? 'अंतिम शासन प्रभाव स्कोर' : 'Final Governance Impact Score'"></span>
+  </h3>
+
+  <p class="text-center font-bold text-3xl text-green-700" x-text="metrics().govContinuity + ' / 100'"></p>
+
+  <p class="text-center text-sm text-gray-700 mt-2" x-show="language==='english'">
+    Higher scores reflect stronger development momentum.
+  </p>
+  <p class="text-center text-sm text-gray-700 mt-2" x-show="language==='hindi'">
+    उच्च अंक बताते हैं कि विकास की रफ्तार लगातार मजबूत होगी।
+  </p>
+</div>
+
+                    </div>
+     
+                </div>
+             </template>
+        </div>
+
+        <template x-if="selectedState">
+            <div class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50" @click="selectedState = null">
+                <div class="bg-white rounded-lg p-6 max-w-sm w-full" @click.stop>
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-lg font-bold text-gray-900"
+    x-text="selectedState.name[language]">
+</h3>
+
+                        <button @click="selectedState = null" class="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="bg-gray-50 rounded p-3">
+                            <p class="text-xs text-gray-600 mb-1" 
+   x-text="language === 'hindi' ? 'प्रशासनिक प्रभाव' : 'Administrative Impact'">
+</p>
+
+                            <p class="text-lg font-bold text-gray-900" x-text="selectedState.admin"></p>
+                        </div>
+                        <div class="bg-gray-50 rounded p-3">
+                           <p class="text-xs text-gray-600 mb-1" 
+   x-text="language === 'hindi' ? 'वित्तीय प्रभाव' : 'Financial Impact'">
+</p>
+
+                            <p class="text-lg font-bold text-gray-900" x-text="'₹' + selectedState.financial + ' ' + t().crores"></p>
+
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        </template>
+
+
+        <!-- Predictor Button -->
+<a href="predictor.html"
+   class="fixed right-3 top-[12%] bg-red-600 text-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center hover:bg-red-700 hover:scale-110 transition-all z-50">
+   <i data-lucide="cpu" class="w-7 h-7"></i>
+</a>
+<div class="fixed right-[4px] top-[19%] text-xs font-semibold text-gray-700 bg-white px-2 py-1 rounded shadow z-50">
+   Predictor
+</div>
+
+
+       <!-- AI Scenario Button -->
+<a href="scenario.html"
+   class="fixed right-3 top-[25%] bg-blue-600 text-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center hover:bg-blue-700 hover:scale-110 transition-all z-50">
+   <i data-lucide="sparkles" class="w-7 h-7"></i>
+</a>
+<div class="fixed right-[5px] top-[32.5%] text-xs font-semibold text-gray-700 bg-white px-2 py-1 rounded shadow z-50">
+   AI Scenario
+</div>
+
+
+<!-- Heatmap Button -->
+<a href="heatmap.html"
+   class="fixed right-3 top-[40%] bg-green-600 text-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center hover:bg-green-700 hover:scale-110 transition-all z-50">
+   <i data-lucide="flame" class="w-7 h-7"></i>
+</a>
+<div class="fixed right-[6px] top-[47%] text-xs font-semibold text-gray-700 bg-white px-2 py-1 rounded shadow z-50">
+   Heatmap
+</div>
+
+
+<!-- Local Bodies Button -->
+<a href="local-body.html"
+   class="fixed right-3 top-[58%] bg-purple-600 text-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center hover:bg-orange-700 hover:scale-110 transition-all z-50">
+   <i data-lucide="building-2" class="w-7 h-7"></i>
+</a>
+<div class="fixed right-[3px] top-[65%] text-xs font-semibold text-gray-700 bg-white px-2 py-1 rounded shadow z-50">
+   Local Bodies
+</div>
+
+
+
+
+
+        <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg">
+            <div class="flex justify-around p-2">
+                <button @click="changeScreen('home')" :class="currentScreen === 'home' ? 'text-orange-600 bg-orange-50' : 'text-gray-600'" class="flex flex-col items-center gap-1 p-2 rounded transition-all">
+                    <i data-lucide="home" class="w-5 h-5"></i><span class="text-xs font-medium" x-text="t().home"></span>
+                </button>
+                <button @click="changeScreen('financial')" :class="currentScreen === 'financial' ? 'text-orange-600 bg-orange-50' : 'text-gray-600'" class="flex flex-col items-center gap-1 p-2 rounded transition-all">
+                    <i data-lucide="calculator" class="w-5 h-5"></i><span class="text-xs font-medium" x-text="t().financial"></span>
+                </button>
+                <button @click="changeScreen('admin')" :class="currentScreen === 'admin' ? 'text-orange-600 bg-orange-50' : 'text-gray-600'" class="flex flex-col items-center gap-1 p-2 rounded transition-all">
+                    <i data-lucide="users" class="w-5 h-5"></i><span class="text-xs font-medium" x-text="t().admin"></span>
+                </button>
+                <button @click="changeScreen('governance')" :class="currentScreen === 'governance' ? 'text-orange-600 bg-orange-50' : 'text-gray-600'" class="flex flex-col items-center gap-1 p-2 rounded transition-all">
+                    <i data-lucide="trending-up" class="w-5 h-5"></i><span class="text-xs font-medium" x-text="t().governance"></span>
+                </button>
+               
+            </div>
+        </div>
+
+        <div class="fixed bottom-16 left-0 right-0 bg-gradient-to-t from-white via-white to-transparent p-4 pointer-events-none">
+            <div class="text-center text-xs text-gray-500">
+                <p x-text="t().dataSource + ': EC India, Finance Ministry'"></p>
+                <p class="mt-1" x-text="t().methodology + ': Simulation-based Analysis'"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function onoeApp() {
+            return {
+                language: 'hindi',
+                currentScreen: 'home',
+                scenarioType: 'full',
+                selectedState: null,
+               states: [
+  {
+    name: { hindi: 'महाराष्ट्र', english: 'Maharashtra' },
+    impact: 'high',
+    financial: '3200',
+    admin: { hindi: 'उच्च', english: 'High' }
+  },
+  {
+    name: { hindi: 'उत्तर प्रदेश', english: 'Uttar Pradesh' },
+    impact: 'high',
+    financial: '4100',
+    admin: { hindi: 'उच्च', english: 'High' }
+  },
+  {
+    name: { hindi: 'कर्नाटक', english: 'Karnataka' },
+    impact: 'medium',
+    financial: '1800',
+    admin: { hindi: 'मध्यम', english: 'Medium' }
+  },
+  {
+    name: { hindi: 'पश्चिम बंगाल', english: 'West Bengal' },
+    impact: 'medium',
+    financial: '2200',
+    admin: { hindi: 'मध्यम', english: 'Medium' }
+  },
+  {
+    name: { hindi: 'तमिलनाडु', english: 'Tamil Nadu' },
+    impact: 'medium',
+    financial: '1900',
+    admin: { hindi: 'मध्यम', english: 'Medium' }
+  },
+  {
+    name: { hindi: 'गोवा', english: 'Goa' },
+    impact: 'low',
+    financial: '120',
+    admin: { hindi: 'निम्न', english: 'Low' }
+  }
+],
+
+                content: {
+                    hindi: {
+                        appTitle: 'चुनाव संगम', appSubtitle: 'प्रभाव और व्यवहार्यता विश्लेषक',
+                        home: 'मुख्य पृष्ठ', financial: 'वित्तीय प्रभाव', admin: 'प्रशासनिक भार',
+                        governance: 'शासन दक्षता', legal: 'संवैधानिक तत्परता', map: 'राज्यवार प्रभाव',
+                        startSim: 'सिमुलेशन शुरू करें', costSaving: 'अनुमानित लागत बचत',
+                        adminScore: 'प्रशासनिक दक्षता स्कोर', syncIndex: 'चुनाव समन्वय सूचकांक',
+                        govContinuity: 'शासन निरंतरता स्तर', disclaimer: 'यह एक सूचनात्मक विश्लेषण उपकरण है। सभी डेटा अनुमानित और सिमुलेशन आधारित हैं।',
+                        currentSystem: 'वर्तमान प्रणाली', synchronized: 'समन्वित चुनाव',
+                        estimatedCost: 'अनुमानित खर्च', longTermSaving: 'दीर्घकालिक बचत',
+                        staffDeployment: 'कर्मचारी तैनाती', securityForces: 'सुरक्षा बल उपयोग',
+                        mccDuration: 'आचार संहिता अवधि', policySpeed: 'नीति कार्यान्वयन गति',
+                        projectDelay: 'परियोजना विलंब', govStability: 'शासन स्थिरता',
+                        constAmendment: 'आवश्यक संवैधानिक संशोधन', riskLevel: 'जोखिम स्तर',
+                        scenarioBuilder: 'परिदृश्य निर्माता', fullSync: 'पूर्ण समन्वय',
+                        partialSync: 'आंशिक समन्वय', current: 'वर्तमान', compare: 'तुलना करें',
+                        methodology: 'कार्यप्रणाली', dataSource: 'डेटा स्रोत', selectState: 'राज्य चुनें',
+                        impact: 'प्रभाव', high: 'उच्च', medium: 'मध्यम', low: 'निम्न',
+                        years: 'वर्ष', crores: 'करोड़', days: 'दिन', percentage: 'प्रतिशत',overallEfficiency: 'समग्र दक्षता सूचकांक',
+                        indiaMap: 'भारत का नक्शा',
+                        selectStateHint: 'राज्य चुनने के लिए नीचे सूची देखें'
+                    },
+                    english: {
+                        appTitle: 'CHUNAV SANGAM ', appSubtitle: 'Impact & Feasibility Analyzer For ONOE',
+                        home: 'Home', financial: 'Financial Impact', admin: 'Admin Load',
+                        governance: 'Governance Efficiency', legal: 'Constitutional Readiness', map: 'State-wise Impact',
+                        startSim: 'Start Simulation', costSaving: 'Estimated Cost Saving',
+                        adminScore: 'Administrative Efficiency Score', syncIndex: 'Election Synchronization Index',
+                        govContinuity: 'Governance Continuity Level', disclaimer: 'This is an informational analysis tool. All data is estimated and simulation-based.',
+                        currentSystem: 'Current System', synchronized: 'Synchronized Elections',
+                        estimatedCost: 'Estimated Cost', longTermSaving: 'Long-term Savings',
+                        staffDeployment: 'Staff Deployment', securityForces: 'Security Forces Usage',
+                        mccDuration: 'MCC Duration', policySpeed: 'Policy Implementation Speed',
+                        projectDelay: 'Project Delay', govStability: 'Governance Stability',
+                        constAmendment: 'Required Constitutional Amendment', riskLevel: 'Risk Level',
+                        scenarioBuilder: 'Scenario Builder', fullSync: 'Full Synchronization',
+                        partialSync: 'Partial Synchronization', current: 'Current', compare: 'Compare',
+                        methodology: 'Methodology', dataSource: 'Data Source', selectState: 'Select State',
+                        impact: 'Impact', high: 'High', medium: 'Medium', low: 'Low',
+                        years: 'Years', crores: 'Crores', days: 'Days', percentage: 'Percentage',overallEfficiency: 'Overall Efficiency Index',
+                         indiaMap: 'Map of India',
+                          selectStateHint: 'Select a state from the list below'  
+                    }
+                },
+                t() { return this.content[this.language]; },
+                metrics() {
+  const baselineCost = 45000;
+  const syncCost = this.scenarioType === 'full' ? 25000 : 35000;
+
+  const saving = baselineCost - syncCost;
+  const adminScore = this.scenarioType === 'full' ? 85 : 72;
+  const syncIndex = this.scenarioType === 'full' ? 92 : 75;
+  const govContinuity = this.scenarioType === 'full' ? 88 : 78;
+
+  const readinessScore = Math.round(
+    (saving / baselineCost) * 100 * 0.30 +
+    adminScore * 0.30 +
+    govContinuity * 0.25 +
+    syncIndex * 0.15
+  );
+
+  let readinessLevel = '';
+  let decisionText = '';
+
+  if (readinessScore >= 70) {
+    readinessLevel = 'High Readiness';
+    decisionText = 'ONOE is highly feasible under the current scenario.';
+  } else if (readinessScore >= 40) {
+    readinessLevel = 'Moderate Readiness';
+    decisionText = 'ONOE is feasible with phased or gradual implementation.';
+  } else {
+    readinessLevel = 'Low Readiness';
+    decisionText = 'ONOE is currently high-risk and not advisable.';
+  }
+
+  return {
+    saving,
+    adminScore,
+    syncIndex,
+    govContinuity,
+    readinessScore,
+    readinessLevel,
+    decisionText,
+    baselineCost,
+    syncCost
+  };
+},
+                changeScreen(s) {
+                    this.currentScreen = s;
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                initIcons() {
+                    lucide.createIcons();
+                }
+            }
+        }
+    </script>
+    
+</body>
+</html>

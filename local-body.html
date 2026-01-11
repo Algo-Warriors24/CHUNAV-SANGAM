@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Body Readiness Scanner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        [x-cloak] { display: none !important; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50" x-data="onoeApp()" x-init="initIcons()">
+
+    <div class="min-h-screen">
+        <!-- HEADER -->
+        <div class="bg-gradient-to-r from-orange-600 to-blue-800 text-white p-4 sticky top-0 z-40 shadow-lg">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                        <i data-lucide="shield" class="w-6 h-6 text-orange-600"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-base font-bold" x-text="t().appTitle"></h1>
+                        <p class="text-xs opacity-90" x-text="t().appSubtitle"></p>
+                    </div>
+                </div>
+                <button
+                    @click="language = (language === 'hindi' ? 'english' : 'hindi'); $nextTick(() => initIcons())"
+                    class="bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded text-xs font-medium transition-all"
+                    x-text="language === 'hindi' ? 'English' : 'हिंदी'">
+                </button>
+            </div>
+        </div>
+
+        <!-- LOCAL BODY SCREEN ONLY -->
+        <div class="p-4 pb-24 space-y-4">
+            <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                <i data-lucide="building" class="w-5 h-5 text-indigo-600"></i>
+                <span x-text="t().localBodyScanner"></span>
+            </h2>
+
+            <!-- Overview -->
+            <div class="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg p-4 shadow border-l-4 border-indigo-500">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow">
+                        <i data-lucide="building-2" class="w-5 h-5 text-indigo-600"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-bold text-gray-900" x-text="t().totalLocalBodies"></p>
+                        <p class="text-2xl font-bold text-indigo-600">2,50,000+</p>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-600 bg-white/70 p-2 rounded">
+                    <i data-lucide="info" class="w-3 h-3 inline mr-1"></i>
+                    <span x-text="t().localBodyInfo"></span>
+                </p>
+            </div>
+
+            <!-- Category Cards -->
+            <div class="grid grid-cols-3 gap-2">
+                <div class="bg-white rounded-lg p-3 shadow border border-gray-200 text-center">
+                    <i data-lucide="tree-deciduous" class="w-5 h-5 mx-auto text-green-600 mb-1"></i>
+                    <p class="text-xs text-gray-600" x-text="t().panchayats"></p>
+                    <p class="text-lg font-bold text-green-700">2.5L</p>
+                </div>
+                <div class="bg-white rounded-lg p-3 shadow border border-gray-200 text-center">
+                    <i data-lucide="building" class="w-5 h-5 mx-auto text-blue-600 mb-1"></i>
+                    <p class="text-xs text-gray-600" x-text="t().municipalities"></p>
+                    <p class="text-lg font-bold text-blue-700">4,000</p>
+                </div>
+                <div class="bg-white rounded-lg p-3 shadow border border-gray-200 text-center">
+                    <i data-lucide="landmark" class="w-5 h-5 mx-auto text-purple-600 mb-1"></i>
+                    <p class="text-xs text-gray-600" x-text="t().corporations"></p>
+                    <p class="text-lg font-bold text-purple-700">200+</p>
+                </div>
+            </div>
+
+            <!-- Readiness -->
+            <div class="bg-white rounded-lg p-4 shadow border border-gray-200">
+                <p class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                    <i data-lucide="scan" class="w-4 h-4 text-indigo-600"></i>
+                    <span x-text="t().readinessChecks"></span>
+                </p>
+
+                <div class="space-y-3">
+                    <div class="border-l-4 border-yellow-500 pl-3 py-2 bg-yellow-50 rounded-r">
+                        <div class="flex justify-between items-center text-xs font-semibold mb-1">
+                            <span x-text="t().termOverlap"></span><span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded">67%</span>
+                        </div>
+                        <p class="text-xs text-gray-600" x-text="t().termOverlapDesc"></p>
+                    </div>
+
+                    <div class="border-l-4 border-red-500 pl-3 py-2 bg-red-50 rounded-r">
+                        <div class="flex justify-between items-center text-xs font-semibold mb-1">
+                            <span x-text="t().lawMismatch"></span><span class="bg-red-100 text-red-700 px-2 py-1 rounded">28</span>
+                        </div>
+                        <p class="text-xs text-gray-600" x-text="t().lawMismatchDesc"></p>
+                    </div>
+
+                    <div class="border-l-4 border-orange-500 pl-3 py-2 bg-orange-50 rounded-r">
+                        <div class="flex justify-between items-center text-xs font-semibold mb-1">
+                            <span x-text="t().urbanRuralGap"></span><span class="bg-orange-100 text-orange-700 px-2 py-1 rounded">42%</span>
+                        </div>
+                        <p class="text-xs text-gray-600" x-text="t().urbanRuralGapDesc"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Roadmap -->
+            <div class="bg-white rounded-lg p-4 shadow border border-gray-200">
+                <div class="flex justify-between items-center mb-4">
+                    <p class="text-sm font-semibold flex items-center gap-2">
+                        <i data-lucide="map" class="w-4 h-4 text-indigo-600"></i>
+                        <span x-text="t().syncRoadmap"></span>
+                    </p>
+                    <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded font-semibold" x-text="t().roadmapBadge"></span>
+                </div>
+
+                <div class="space-y-4">
+                    <template x-for="(phase, index) in localBodyRoadmap" :key="index">
+                        <div class="relative flex items-start gap-3">
+                            <div class="flex flex-col items-center">
+                                <div :class="phase.status === 'current' ? 'bg-indigo-600 ring-4 ring-indigo-100' : 'bg-gray-300'"
+                                     class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shadow"
+                                     x-text="index + 1"></div>
+                                <div x-show="index < localBodyRoadmap.length - 1"
+                                     class="w-0.5 h-16 mt-1"
+                                     :class="phase.status === 'current' ? 'bg-indigo-200' : 'bg-gray-300'"></div>
+                            </div>
+                            <div class="flex-1 bg-gray-50 rounded-lg p-3 border border-gray-200">
+                                <div class="flex justify-between items-center mb-2">
+                                    <p class="text-sm font-semibold text-gray-900" x-text="phase.category"></p>
+                                    <span class="px-2 py-1 rounded text-xs font-semibold"
+                                          :class="phase.status==='current'?'bg-indigo-100 text-indigo-700':'bg-gray-100 text-gray-700'"
+                                          x-text="phase.years + ' ' + t().years"></span>
+                                </div>
+                                <p class="text-xs text-gray-600 flex items-center gap-1 mb-2">
+                                    <i data-lucide="target" class="w-3 h-3"></i>
+                                    <span x-text="phase.target"></span>
+                                </p>
+                                <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                                    <div class="h-2 rounded-full"
+                                         :class="phase.status==='current'?'bg-indigo-500':'bg-gray-400'"
+                                         :style="'width:'+phase.progress+'%'"></div>
+                                </div>
+                                <p class="text-xs text-gray-600 flex items-start gap-1">
+                                    <i data-lucide="alert-circle" class="w-3 h-3 text-orange-500"></i>
+                                    <span x-text="phase.challenge"></span>
+                                </p>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="bg-gradient-to-r from-red-50 to-orange-50 rounded-lg p-4 shadow border-l-4 border-red-500">
+                <p class="text-sm font-bold text-gray-900 mb-2" x-text="t().urgentActions"></p>
+                <ul class="space-y-1 text-xs text-gray-700">
+                    <li>• <span x-text="t().action1"></span></li>
+                    <li>• <span x-text="t().action2"></span></li>
+                    <li>• <span x-text="t().action3"></span></li>
+                </ul>
+            </div>
+
+            <!-- Summary -->
+            <div class="grid grid-cols-2 gap-3">
+                <div class="bg-white rounded-lg p-4 shadow border">
+                    <p class="flex items-center gap-2 text-xs text-gray-600 mb-1">
+                        <i data-lucide="calendar" class="w-4 h-4 text-indigo-600"></i>
+                        <span x-text="t().totalSyncTime"></span>
+                    </p>
+                    <p class="text-2xl font-bold text-indigo-700">8-10</p>
+                    <p class="text-xs text-gray-500" x-text="t().years"></p>
+                </div>
+                <div class="bg-white rounded-lg p-4 shadow border">
+                    <p class="flex items-center gap-2 text-xs text-gray-600 mb-1">
+                        <i data-lucide="check-circle" class="w-4 h-4 text-green-600"></i>
+                        <span x-text="t().readinessScore"></span>
+                    </p>
+                    <p class="text-2xl font-bold text-green-700">34%</p>
+                    <p class="text-xs text-gray-500" x-text="t().current"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER INFO -->
+        <div class="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-white via-white to-transparent p-4 text-center text-xs text-gray-500 pointer-events-none">
+            <p x-text="t().dataSource + ': EC India, Finance Ministry'"></p>
+            <p class="mt-1" x-text="t().methodology + ': Simulation-based Analysis'"></p>
+        </div>
+    </div>
+
+<script>
+function onoeApp() {
+    return {
+        language: 'english',
+        localBodyRoadmap: [
+            { category: 'Gram Panchayats', years: '2-3', target: '~2.5 lakh bodies', progress: 25, status: 'current', challenge: 'Varying 5-year terms across states' },
+            { category: 'Block & District Panchayats', years: '2-3', target: '~6,000 bodies', progress: 15, status: 'pending', challenge: 'Intermediate tier sync' },
+            { category: 'Municipalities & Nagar Palikas', years: '3-4', target: '~4,000 bodies', progress: 10, status: 'pending', challenge: 'Different laws across 28 states' },
+            { category: 'Municipal Corporations', years: '1-2', target: '200+ bodies', progress: 30, status: 'pending', challenge: 'Major city term mismatch' }
+        ],
+        content:{
+            english:{
+                appTitle:'CHUNAV SANGAM', appSubtitle:'Impact & Feasibility Analyzer For ONOE',
+                localBodyScanner:'Local Body Readiness Scanner', totalLocalBodies:'Total Local Bodies',
+                localBodyInfo:'India has 2.5+ lakh local bodies that need synchronization',
+                panchayats:'Panchayats', municipalities:'Municipalities', corporations:'Corporations',
+                readinessChecks:'Readiness Checks', termOverlap:'Panchayat Term Overlap',
+                termOverlapDesc:'67% local bodies have term mismatches',
+                lawMismatch:'Municipal Election Laws', lawMismatchDesc:'28 states with different laws and procedures',
+                urbanRuralGap:'Urban-Rural Mismatch', urbanRuralGapDesc:'42% bodies have election calendar inconsistency',
+                syncRoadmap:'Synchronization Roadmap', roadmapBadge:'8-10 Year Plan',
+                urgentActions:'Urgent Actions Required',
+                action1:'Standardize municipal election laws across states',
+                action2:'Align panchayat and urban body terms',
+                action3:'Build unified local election infra',
+                totalSyncTime:'Total Sync Time', readinessScore:'Readiness Score',
+                years:'Years', current:'Current',
+                dataSource:'Data Source', methodology:'Methodology'
+            },
+            hindi:{
+                appTitle:'एक राष्ट्र एक चुनाव', appSubtitle:'प्रभाव और व्यवहार्यता विश्लेषक',
+                localBodyScanner:'स्थानीय निकाय तत्परता स्कैनर', totalLocalBodies:'कुल स्थानीय निकाय',
+                localBodyInfo:'भारत में 2.5+ लाख स्थानीय निकाय हैं जिन्हें समन्वय की जरूरत है',
+                panchayats:'पंचायतें', municipalities:'नगरपालिकाएं', corporations:'निगम',
+                readinessChecks:'तत्परता जांच', termOverlap:'कार्यकाल अधिव्यापन',
+                termOverlapDesc:'67% निकायों में कार्यकाल मिसमैच',
+                lawMismatch:'नगरपालिका चुनाव कानून', lawMismatchDesc:'28 राज्यों में अलग कानून',
+                urbanRuralGap:'शहरी-ग्रामीण बेमेल', urbanRuralGapDesc:'42% निकायों में कैलेंडर असंगति',
+                syncRoadmap:'समन्वय रोडमैप', roadmapBadge:'8-10 साल की योजना',
+                urgentActions:'तत्काल जरूरी कदम',
+                action1:'सभी राज्यों में चुनाव कानून मानकीकरण',
+                action2:'कार्यकाल संरेखण',
+                action3:'एकीकृत चुनाव प्रणाली',
+                totalSyncTime:'कुल समन्वय समय', readinessScore:'तत्परता स्कोर',
+                years:'वर्ष', current:'वर्तमान',
+                dataSource:'डेटा स्रोत', methodology:'कार्यप्रणाली'
+            }
+        },
+        t(){ return this.content[this.language]; },
+        initIcons(){ lucide.createIcons(); }
+    };
+}
+</script>
+
+</body>
+</html>

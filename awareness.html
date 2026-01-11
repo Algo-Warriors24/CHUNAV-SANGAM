@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chunav Sangam - Voter Awareness Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(180deg, 
+                rgba(255, 153, 51, 0.12) 0%, 
+                rgba(255, 255, 255, 1) 15%,
+                rgba(255, 255, 255, 1) 50%,
+                rgba(255, 255, 255, 1) 85%,
+                rgba(19, 136, 8, 0.12) 100%);
+            min-height: 100vh;
+        }
+        
+        @keyframes wave {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .wave-emoji {
+            animation: wave 2s ease-in-out infinite;
+        }
+        
+        @keyframes shine {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        
+        .shine-effect {
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            background-size: 200% 100%;
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+        
+        .float-effect {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(255, 153, 51, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(255, 153, 51, 0.8), 0 0 30px rgba(19, 136, 8, 0.6); }
+        }
+        
+        .glow-card {
+            animation: glow 2s ease-in-out infinite;
+        }
+        
+        .progress-shine {
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.4) 50%, 
+                transparent 100%);
+            background-size: 200% 100%;
+            animation: shine 2s infinite;
+        }
+        
+        @keyframes bounce-subtle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .bounce-icon {
+            animation: bounce-subtle 1.5s ease-in-out infinite;
+        }
+        
+        .tricolor-border {
+            border-image: linear-gradient(to right, #FF9933, #FFFFFF, #138808) 1;
+            border-width: 4px;
+            border-style: solid;
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased" x-data="voterAwarenessData()">
+    
+    <!-- Header -->
+    <header class="bg-white shadow-xl sticky top-0 z-50 border-b-4 border-orange-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="text-center sm:text-left">
+                    <h1 class="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-orange-600 via-white to-green-600 bg-clip-text text-transparent flex items-center justify-center sm:justify-start gap-3">
+                        <span class="text-5xl wave-emoji">🗳️</span> 
+                        <span class="text-orange-600">Chunav</span>
+                        <span class="text-gray-800">Sangam</span>
+                    </h1>
+                    <p class="text-sm font-semibold text-gray-700 mt-2">मतदाता जागरूकता पोर्टल | Voter Awareness Portal</p>
+                </div>
+                <div class="flex flex-col sm:flex-row items-center gap-3">
+                    <div class="bg-gradient-to-r from-orange-100 to-green-100 px-5 py-2 rounded-full border-2 border-orange-400 glow-card">
+                        <span class="text-sm font-bold text-gray-800">🎯 Mission: 100% Voter Participation</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Banner -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="bg-gradient-to-r from-orange-50 via-white to-green-50 rounded-3xl shadow-2xl p-8 sm:p-12 border-4 border-orange-300">
+            <div class="text-center">
+                <h2 class="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+                    <span class="text-5xl float-effect inline-block">🇮🇳</span> Every Vote Counts
+                </h2>
+                <p class="text-xl text-gray-700 mb-6">हर वोट मायने रखता है | Your Voice, Your Choice, Your Democracy</p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <div class="bg-white px-6 py-3 rounded-xl shadow-lg border-2 border-green-400">
+                        <div class="text-3xl font-bold text-green-700" x-text="nationalStats.registeredVoters"></div>
+                        <div class="text-sm text-gray-600">Registered Voters</div>
+                    </div>
+                    <div class="bg-white px-6 py-3 rounded-xl shadow-lg border-2 border-blue-400">
+                        <div class="text-3xl font-bold text-blue-700" x-text="nationalStats.targetTurnout + '%'"></div>
+                        <div class="text-sm text-gray-600">Target Turnout</div>
+                    </div>
+                    <div class="bg-white px-6 py-3 rounded-xl shadow-lg border-2 border-orange-400">
+                        <div class="text-3xl font-bold text-orange-700" x-text="nationalStats.awarenessScore + '%'"></div>
+                        <div class="text-sm text-gray-600">Awareness Score</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- National Awareness Dashboard -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="bg-white rounded-3xl shadow-xl p-6 sm:p-8 border-l-8 border-orange-500">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                <span class="text-3xl bounce-icon">📊</span> National Awareness Metrics
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                <!-- Social Media Reach -->
+                <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-5 rounded-2xl border-2 border-blue-300 card-hover cursor-pointer">
+                    <div class="text-center mb-3">
+                        <span class="text-5xl">📱</span>
+                    </div>
+                    <div class="text-3xl font-bold text-blue-700 text-center">245M</div>
+                    <div class="text-sm text-gray-700 text-center mt-2">Social Media Reach</div>
+                    <div class="mt-3 text-xs text-center">
+                        <span class="bg-blue-200 px-3 py-1 rounded-full font-semibold">↑ 34% this month</span>
+                    </div>
+                </div>
+
+                <!-- Community Events -->
+                <div class="bg-gradient-to-br from-green-50 to-green-100 p-5 rounded-2xl border-2 border-green-300 card-hover cursor-pointer">
+                    <div class="text-center mb-3">
+                        <span class="text-5xl">🎪</span>
+                    </div>
+                    <div class="text-3xl font-bold text-green-700 text-center">18,450</div>
+                    <div class="text-sm text-gray-700 text-center mt-2">Community Events</div>
+                    <div class="mt-3 text-xs text-center">
+                        <span class="bg-green-200 px-3 py-1 rounded-full font-semibold">Last 30 days</span>
+                    </div>
+                </div>
+
+                <!-- Youth Engagement -->
+                <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-5 rounded-2xl border-2 border-purple-300 card-hover cursor-pointer">
+                    <div class="text-center mb-3">
+                        <span class="text-5xl">🎓</span>
+                    </div>
+                    <div class="text-3xl font-bold text-purple-700 text-center">5.8M</div>
+                    <div class="text-sm text-gray-700 text-center mt-2">Youth Voters Engaged</div>
+                    <div class="mt-3 text-xs text-center">
+                        <span class="bg-purple-200 px-3 py-1 rounded-full font-semibold">18-25 age group</span>
+                    </div>
+                </div>
+
+                <!-- Helpline Calls -->
+                <div class="bg-gradient-to-br from-orange-50 to-orange-100 p-5 rounded-2xl border-2 border-orange-300 card-hover cursor-pointer">
+                    <div class="text-center mb-3">
+                        <span class="text-5xl">☎️</span>
+                    </div>
+                    <div class="text-3xl font-bold text-orange-700 text-center">1.2M</div>
+                    <div class="text-sm text-gray-700 text-center mt-2">Helpline Queries</div>
+                    <div class="mt-3 text-xs text-center">
+                        <span class="bg-orange-200 px-3 py-1 rounded-full font-semibold">98% resolved</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- State-wise Awareness Map -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="bg-white rounded-3xl shadow-xl p-6 sm:p-8 tricolor-border">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                <h2 class="text-3xl font-bold text-gray-900 flex items-center gap-3">
+                    <span class="text-3xl">🗺️</span> State-wise Awareness Index
+                </h2>
+                <select 
+                    x-model="sortBy" 
+                    class="px-4 py-2 border-3 border-orange-400 rounded-xl focus:outline-none focus:border-green-500 font-semibold"
+                >
+                    <option value="awareness">Sort by Awareness</option>
+                    <option value="name">Sort by Name</option>
+                    <option value="turnout">Sort by Target Turnout</option>
+                </select>
+            </div>
+
+            <!-- Awareness Level Legend -->
+            <div class="flex flex-wrap justify-center gap-4 mb-6 p-4 bg-gray-50 rounded-xl">
+                <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 bg-green-500 rounded-full"></div>
+                    <span class="text-sm font-bold text-green-800">Excellent (85%+)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 bg-blue-500 rounded-full"></div>
+                    <span class="text-sm font-bold text-blue-800">Good (70-84%)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 bg-yellow-500 rounded-full"></div>
+                    <span class="text-sm font-bold text-yellow-800">Moderate (55-69%)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 bg-red-500 rounded-full"></div>
+                    <span class="text-sm font-bold text-red-800">Needs Focus (<55%)</span>
+                </div>
+            </div>
+
+            <!-- States Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <template x-for="state in sortedStates" :key="state.name">
+                    <div class="bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-lg p-5 border-2 card-hover cursor-pointer"
+                         :class="{
+                             'border-green-400': state.awareness >= 85,
+                             'border-blue-400': state.awareness >= 70 && state.awareness < 85,
+                             'border-yellow-400': state.awareness >= 55 && state.awareness < 70,
+                             'border-red-400': state.awareness < 55
+                         }"
+                         @click="selectState(state)">
+                        
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h3 class="font-bold text-lg text-gray-900" x-text="state.name"></h3>
+                                <p class="text-xs text-gray-600" x-text="state.voters + ' voters'"></p>
+                            </div>
+                            <span class="text-3xl" x-text="state.emoji"></span>
+                        </div>
+
+                        <!-- Awareness Score -->
+                        <div class="mb-3">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-bold text-gray-700">Awareness Level</span>
+                                <span class="text-2xl font-bold"
+                                      :class="{
+                                          'text-green-700': state.awareness >= 85,
+                                          'text-blue-700': state.awareness >= 70 && state.awareness < 85,
+                                          'text-yellow-700': state.awareness >= 55 && state.awareness < 70,
+                                          'text-red-700': state.awareness < 55
+                                      }"
+                                      x-text="state.awareness + '%'"></span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+                                <div class="h-4 rounded-full relative progress-shine"
+                                     :class="{
+                                         'bg-green-500': state.awareness >= 85,
+                                         'bg-blue-500': state.awareness >= 70 && state.awareness < 85,
+                                         'bg-yellow-500': state.awareness >= 55 && state.awareness < 70,
+                                         'bg-red-500': state.awareness < 55
+                                     }"
+                                     :style="`width: ${state.awareness}%`"></div>
+                            </div>
+                        </div>
+
+                        <!-- Target Turnout -->
+                        <div class="mb-3">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-bold text-gray-700">Target Turnout</span>
+                                <span class="text-xl font-bold text-purple-700" x-text="state.targetTurnout + '%'"></span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div class="bg-purple-500 h-3 rounded-full"
+                                     :style="`width: ${state.targetTurnout}%`"></div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Stats -->
+                        <div class="grid grid-cols-3 gap-2 mt-3">
+                            <div class="bg-blue-50 p-2 rounded-lg text-center">
+                                <div class="text-lg font-bold text-blue-700" x-text="state.campaigns"></div>
+                                <div class="text-xs text-gray-600">Campaigns</div>
+                            </div>
+                            <div class="bg-green-50 p-2 rounded-lg text-center">
+                                <div class="text-lg font-bold text-green-700" x-text="state.volunteers"></div>
+                                <div class="text-xs text-gray-600">Volunteers</div>
+                            </div>
+                            <div class="bg-orange-50 p-2 rounded-lg text-center">
+                                <div class="text-lg font-bold text-orange-700" x-text="state.events"></div>
+                                <div class="text-xs text-gray-600">Events</div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </section>
+
+    <!-- Selected State Details Modal -->
+    <div x-show="selectedState" 
+         x-transition
+         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+         @click.self="selectedState = null">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 border-4 border-orange-400"
+             x-show="selectedState">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <h3 class="text-3xl font-bold text-gray-900 flex items-center gap-3">
+                        <span x-text="selectedState?.emoji" class="text-4xl"></span>
+                        <span x-text="selectedState?.name"></span>
+                    </h3>
+                    <p class="text-sm text-gray-600 mt-1">Detailed Awareness Strategy & Progress</p>
+                </div>
+                <button @click="selectedState = null" class="text-gray-500 hover:text-gray-700 text-3xl font-bold">×</button>
+            </div>
+
+            <template x-if="selectedState">
+                <div class="space-y-6">
+                    <!-- Current Status -->
+                    <div class="bg-gradient-to-r from-orange-50 to-green-50 p-5 rounded-xl border-2 border-orange-300">
+                        <h4 class="font-bold text-lg mb-3 flex items-center gap-2">
+                            <span>📈</span> Current Status
+                        </h4>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <div class="text-sm text-gray-600">Awareness Level</div>
+                                <div class="text-3xl font-bold text-green-700" x-text="selectedState.awareness + '%'"></div>
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-600">Target Turnout</div>
+                                <div class="text-3xl font-bold text-purple-700" x-text="selectedState.targetTurnout + '%'"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Active Campaigns -->
+                    <div class="bg-blue-50 p-5 rounded-xl border-2 border-blue-300">
+                        <h4 class="font-bold text-lg mb-3 flex items-center gap-2">
+                            <span>📢</span> Active Awareness Campaigns
+                        </h4>
+                        <div class="space-y-2">
+                            <template x-for="campaign in selectedState?.activeCampaigns" :key="campaign">
+                                <div class="flex items-center gap-2 bg-white p-3 rounded-lg">
+                                    <span class="text-green-600 font-bold text-xl">✓</span>
+                                    <span class="text-sm font-medium" x-text="campaign"></span>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- What to Do -->
+                    <div class="bg-green-50 p-5 rounded-xl border-2 border-green-300">
+                        <h4 class="font-bold text-lg mb-3 flex items-center gap-2">
+                            <span>✅</span> Recommended Actions
+                        </h4>
+                        <div class="space-y-2">
+                            <template x-for="(action, index) in selectedState?.recommendedActions" :key="index">
+                                <div class="flex items-start gap-3 bg-white p-3 rounded-lg">
+                                    <span class="text-orange-600 font-bold text-lg" x-text="(index + 1) + '.'"></span>
+                                    <span class="text-sm" x-text="action"></span>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- What NOT to Do -->
+                    <div class="bg-red-50 p-5 rounded-xl border-2 border-red-300">
+                        <h4 class="font-bold text-lg mb-3 flex items-center gap-2">
+                            <span>⚠️</span> Things to Avoid
+                        </h4>
+                        <div class="space-y-2">
+                            <template x-for="avoid in selectedState?.thingsToAvoid" :key="avoid">
+                                <div class="flex items-start gap-3 bg-white p-3 rounded-lg">
+                                    <span class="text-red-600 font-bold text-xl">✗</span>
+                                    <span class="text-sm" x-text="avoid"></span>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+
+    <!-- Awareness Strategies Section -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="bg-white rounded-3xl shadow-xl p-6 sm:p-8 border-r-8 border-green-500">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                <span class="text-3xl">💡</span> Comprehensive Awareness Strategies
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Digital Outreach -->
+                <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl border-3 border-blue-300">
+                    <div class="text-center mb-4">
+                        <span class="text-6xl">📲</span>
+                    </div>
+                    <h3 class="font-bold text-xl text-blue-900 mb-4 text-center">Digital Outreach</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-600 font-bold">✓</span>
+                            <span class="text-sm">Social media campaigns on Facebook, Instagram, Twitter/X</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-600 font-bold">✓</span>
+                            <span class="text-sm">WhatsApp groups for community leaders and influencers</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-600 font-bold">✓</span>
+                            <span class="text-sm">YouTube educational videos in regional languages</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-600 font-bold">✓</span>
+                            <span class="text-sm">Mobile app for voter registration and booth locator</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-600 font-bold">✓</span>
+                            <span class="text-sm">SMS campaigns with voting dates and procedures</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Ground Activities -->
+                <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-2xl border-3 border-green-300">
+                    <div class="text-center mb-4">
+                        <span class="text-6xl">🚶</span>
+                    </div>
+                    <h3 class="font-bold text-xl text-green-900 mb-4 text-center">Ground Activities</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-2">
+                            <span class="text-green-600 font-bold">✓</span>
+                            <span class="text-sm">Door-to-door awareness campaigns in rural areas</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-green-600 font-bold">✓</span>
+                            <span class="text-sm">Street plays (Nukkad Natak) highlighting importance of voting</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-green-600 font-bold">✓</span>
+                            <span class="text-sm">Community gatherings at village squares and urban parks</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-green-600 font-bold">✓</span>
+                            <span class="text-sm">Wall paintings and banners in high-traffic areas</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-green-600 font-bold">✓</span>
+                            <span class="text-sm">Vehicle rallies with loudspeakers in remote regions</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Institutional Partnerships -->
+                <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-2xl border-3 border-purple-300">
+                    <div class="text-center mb-4">
+                        <span class="text-6xl">🏫</span>
+                    </div>
+                    <h3 class="font-bold text-xl text-purple-900 mb-4 text-center">Institutional Partnerships</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-2">
+                            <span class="text-purple-600 font-bold">✓</span>
+                            <span class="text-sm">College and university programs for first-time voters</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-purple-600 font-bold">✓</span>
+                            <span class="text-sm">Corporate employee engagement through CSR initiatives</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-purple-600 font-bold">✓</span>
+                            <span class="text-sm">Religious and community leader involvement</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-purple-600 font-bold">✓</span>
+                            <span class="text-sm">Self-help groups (SHGs) as awareness ambassadors</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-purple-600 font-bold">✓</span>
+                            <span class="text-sm">NGO partnerships for marginalized community outreach</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Media & Entertainment -->
+                <div class="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-2xl border-3 border-orange-300">
+                    <div class="text-center mb-4">
+                        <span class="text-6xl">🎬</span>
+                    </div>
+                    <h3 class="font-bold text-xl text-orange-900 mb-4 text-center">Media & Entertainment</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-2">
+                            <span class="text-orange-600 font-bold">✓</span>
+                            <span class="text-sm">Radio jingles in regional languages during prime time</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-orange-600 font-bold">✓</span>
+                            <span class="text-sm">TV commercials featuring celebrities and influencers</span>
+                        </li>
+                        

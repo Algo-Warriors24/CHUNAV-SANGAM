@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>💰 Usage of Savings – Chunav Sangam</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+<style>
+.emoji-bounce { animation: bounce 1.4s infinite; }
+@keyframes bounce {
+  0%,100% {transform: translateY(0);}
+  50% {transform: translateY(-6px);}
+}
+.shimmer {
+  background: linear-gradient(90deg,#fff0,#ff993333,#fff0);
+  animation: shine 2.5s infinite;
+}
+@keyframes shine {
+  0% {background-position:-200px;}
+  100% {background-position:200px;}
+}
+</style>
+</head>
+
+<body class="min-h-screen font-sans text-gray-900 scroll-smooth"
+      style="background: linear-gradient(#ff993222,#ffffffaa,#13880822);"
+      x-data="usage()">
+
+<!-- HEADER -->
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-300 shadow-md">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <h1 class="text-xl md:text-3xl font-extrabold flex items-center gap-2">
+      <span class="emoji-bounce">💰</span> Chunav Sangam — Savings Impact
+    </h1>
+    <button @click="lang = lang==='en'?'hi':'en'"
+      class="px-4 py-1 bg-green-600 text-white rounded font-semibold text-xs shadow hover:bg-green-700">
+      <span x-text="lang==='en'?'हिंदी':'English'"></span>
+    </button>
+  </div>
+</header>
+
+<!-- LIVE TICKER -->
+<div class="bg-green-600 text-white py-2 overflow-hidden shimmer font-semibold text-sm">
+  <marquee>🔥 Estimated ₹20,000 Crore Saved — Reinvested into Public Development | 💉 Health • 🏫 Education • 🚜 Agriculture • 🛣️ Infrastructure • 🌐 Digital Bharat</marquee>
+</div>
+
+<main class="max-w-7xl mx-auto px-6 py-10 space-y-12">
+
+  <!-- TOTAL SAVINGS -->
+  <section class="bg-white border border-gray-300 rounded-2xl shadow-xl p-8">
+    <h2 class="text-3xl font-extrabold text-center mb-8 flex justify-center gap-2">
+      <span class="emoji-bounce">📊</span> <span x-text="t('title')"></span>
+    </h2>
+
+    <div class="text-center space-y-1">
+      <p class="text-6xl font-extrabold text-green-600 tracking-wide shadow-sm"
+         x-text="'₹' + savings + ' Cr'"></p>
+      <p class="text-sm font-semibold text-gray-600" x-text="t('est')"></p>
+    </div>
+  </section>
+
+  <!-- ALLOCATION BARS -->
+  <section class="bg-white border border-gray-300 rounded-2xl shadow-xl p-8">
+    <h2 class="text-2xl font-extrabold mb-6 text-center flex justify-center gap-2">
+      <span class="emoji-bounce">📦</span> <span x-text="t('alloc')"></span>
+    </h2>
+
+    <div class="space-y-6">
+      <template x-for="s in split">
+        <div class="p-4 rounded-xl border border-gray-300 shadow-sm hover:shadow-md transition bg-white">
+          <div class="flex justify-between mb-2">
+            <p class="font-black text-gray-900" x-text="s.label"></p>
+            <span class="text-green-700 font-extrabold" x-text="s.percent + '%'"></span>
+          </div>
+          <div class="w-full h-4 bg-gray-200 rounded-full overflow-hidden border border-gray-300">
+            <div class="h-full bg-gradient-to-r from-green-500 to-green-400 transition-all"
+                 :style="'width:' + s.percent + '%'"></div>
+          </div>
+        </div>
+      </template>
+    </div>
+  </section>
+
+  <!-- STATE FUNDS -->
+  <section class="bg-white border border-gray-300 rounded-2xl shadow-xl p-8">
+    <h2 class="text-2xl font-extrabold mb-6 text-center flex justify-center gap-2">
+      <span class="emoji-bounce">🗺️</span> <span x-text="t('stateUse')"></span>
+    </h2>
+
+    <div class="space-y-3 max-h-80 overflow-auto pr-2">
+      <template x-for="s in states">
+        <div class="flex justify-between items-center p-4 rounded-xl border border-gray-300 bg-gradient-to-r from-green-50 to-white shadow-sm hover:bg-green-100 transition cursor-pointer">
+          <p class="font-extrabold text-gray-800" x-text="s.name"></p>
+          <p class="text-lg font-black text-green-700" x-text="'₹' + s.use + ' Cr'"></p>
+        </div>
+      </template>
+    </div>
+  </section>
+
+  <!-- SECTORS -->
+  <section class="grid md:grid-cols-2 gap-6">
+    <template x-for="box in sectors">
+      <div class="bg-white border border-gray-300 rounded-2xl shadow-xl p-6 hover:shadow-2xl transition">
+        <h3 class="font-extrabold text-xl mb-3 flex items-center gap-2">
+          <span class="emoji-bounce" x-text="box.ico"></span> 
+          <span x-text="box.title"></span>
+        </h3>
+        <ul class="font-semibold text-sm space-y-1">
+          <template x-for="i in box.points">
+            <li x-text="'✓ ' + i"></li>
+          </template>
+        </ul>
+      </div>
+    </template>
+  </section>
+
+  <!-- GROWTH GRAPH -->
+  <section class="bg-white border border-gray-300 rounded-2xl shadow-xl p-8">
+    <h2 class="text-2xl md:text-3xl font-extrabold mb-8 text-center flex justify-center gap-2">
+      <span class="emoji-bounce">📈</span> Savings Deployment Over Years
+    </h2>
+
+    <div class="relative h-64">
+      <svg viewBox="0 0 1000 300" class="w-full h-full">
+        <line x1="50" y1="250" x2="950" y2="250" stroke="#ddd" stroke-width="2"/>
+        <polyline stroke="#10b981" stroke-width="5" fill="none"
+                  points="50,240 200,200 350,180 500,150 650,120 800,90 950,70"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ENERGY BOX -->
+  <section class="bg-white border border-gray-300 rounded-2xl shadow-xl p-8">
+    <h2 class="text-xl font-extrabold mb-3">
+      🌟 <span x-text="t('impact')"></span>
+    </h2>
+    <p class="text-gray-700 font-semibold text-sm leading-relaxed" x-text="t('benefit')"></p>
+  </section>
+
+</main>
+
+<!-- DATA SOURCE -->
+<script>
+function usage(){
+  return {
+    lang:'en',
+    savings:20000,
+    
+    split:[
+      {label:'Healthcare & Hospitals',percent:30},
+      {label:'Schools & Education',percent:22},
+      {label:'Roads, Rail & Infra',percent:20},
+      {label:'Agriculture & Subsidies',percent:18},
+      {label:'Digital & Technology',percent:10},
+    ],
+
+    states:[
+      {name:'Uttar Pradesh',use:4100},
+      {name:'Maharashtra',use:3700},
+      {name:'Tamil Nadu',use:3000},
+      {name:'Karnataka',use:2550},
+      {name:'Bihar',use:2200},
+      {name:'Rajasthan',use:1950},
+      {name:'Delhi',use:1850},
+    ],
+
+    sectors:[
+      {title:'Health Surge',ico:'🏥',points:['District hospitals upgrade','Ambulances & AI triage','Mobile health camps','Emergency care boost']},
+      {title:'Education Lift',ico:'🎓',points:['Smart classrooms rollout','Teacher recruitment','Library modernization','Skill labs in schools']},
+      {title:'Agriculture & Rural',ico:'🚜',points:['Irrigation expansion','Cold storage hubs','PM-Kisan enhanced','Village wifi rollouts']},
+      {title:'Infra & Mobility',ico:'🛣️',points:['Highway widening','Rural roads paving','New rail coaches','Smart transport cards']},
+    ],
+
+    text:{
+      en:{title:'Estimated National Savings Reallocation',est:'Projected savings by implementing ONOE',alloc:'Where Money Goes',stateUse:'State Share of Savings',impact:'Impact on the Ground',benefit:'Savings flow directly into real-life public benefits — hospitals, schools, roads, and farmer schemes.'},
+      hi:{title:'राष्ट्रीय बचत उपयोग',est:'एक राष्ट्र एक चुनाव से अनुमानित बचत',alloc:'बचत का वितरण',stateUse:'राज्यों में निवेश',impact:'जमीनी प्रभाव',benefit:'चुनाव खर्च से बचा धन जनता की भलाई और विकास योजनाओं पर सीधे खर्च होगा।'}
+    },
+    t(k){return this.text[this.lang][k]}
+  }
+}
+</script>
+
+</body>
+</html>

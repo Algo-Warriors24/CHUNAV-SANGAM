@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Janmat Pulse – Chunav Sangam</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+</head>
+
+<body class="min-h-screen font-sans text-gray-900"
+      style="background: linear-gradient(#ff993322,#ffffff88,#13880822);"
+      x-data="pulse()">
+
+<!-- HEADER -->
+<header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-300 shadow-sm">
+  <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+    <h1 class="text-xl md:text-2xl font-extrabold">🗳️ Chunav Sangam — Janmat Pulse</h1>
+    <button @click="lang = lang==='en'?'hi':'en'"
+      class="px-3 py-1 bg-orange-500 text-white rounded font-semibold text-xs">
+      <span x-text="lang==='en'?'हिंदी':'English'"></span>
+    </button>
+  </div>
+</header>
+
+<!-- MAIN CONTENT WRAPPER -->
+<main class="max-w-6xl mx-auto px-4 py-10 space-y-12">
+
+  <!-- NATIONAL GAUGE -->
+  <section class="bg-white border border-gray-300 rounded-2xl shadow-lg p-8">
+    <h2 class="text-2xl md:text-3xl font-extrabold mb-8 text-center" x-text="t('national')"></h2>
+
+    <div class="flex justify-center gap-12 flex-wrap">
+      <template x-for="(v,key) in national">
+        <div class="flex flex-col items-center">
+          <div class="relative w-28 h-28 rounded-full border-[10px]"
+               :class="key==='yes'?'border-green-500':key==='no'?'border-red-500':'border-yellow-500'">
+            <span class="absolute inset-0 flex items-center justify-center font-extrabold text-xl"
+                  x-text="v + '%'"></span>
+          </div>
+          <p class="mt-3 font-bold text-gray-800"
+             x-text="key==='yes'?t('yes'):key==='no'?t('no'):t('neutral')"></p>
+        </div>
+      </template>
+    </div>
+  </section>
+
+  <!-- SOCIAL MEDIA SENTIMENT -->
+  <section class="bg-white border border-gray-300 rounded-2xl shadow-lg p-8">
+    <h2 class="text-2xl md:text-3xl font-extrabold mb-8 text-center flex justify-center items-center gap-2">
+      📲 Social Media Sentiment
+    </h2>
+
+    <div class="space-y-6">
+      <template x-for="s in socials">
+        <div class="rounded-xl p-6 border border-gray-300 shadow bg-white"
+             :class="s.bg">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="font-extrabold text-lg flex items-center gap-2" 
+                x-text="s.icon + ' ' + s.name"></h3>
+            <p class="font-extrabold text-green-700" 
+               x-text="'+' + s.pos + '% Positive'"></p>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden mb-2">
+            <div class="bg-green-500 h-2 rounded-full" :style="'width:' + s.pos + '%'"></div>
+          </div>
+          <p class="text-xs text-gray-700 font-semibold" x-text="s.note"></p>
+        </div>
+      </template>
+    </div>
+  </section>
+
+  <!-- STATE LIST -->
+  <section class="bg-white border border-gray-300 rounded-2xl shadow-lg p-8">
+    <h2 class="text-2xl md:text-3xl font-extrabold mb-6 text-center" x-text="t('states')"></h2>
+
+    <div class="space-y-4 max-h-80 overflow-auto pr-2">
+      <template x-for="s in states">
+        <div class="flex justify-between items-center p-4 rounded-xl border border-gray-300 bg-white shadow-sm hover:bg-gray-50 transition">
+          <div>
+            <p class="font-extrabold text-gray-900" x-text="s.name"></p>
+            <p class="text-xs font-semibold text-gray-600">
+              👍 <span x-text="s.yes"></span>% &nbsp;&nbsp;
+              👎 <span x-text="s.no"></span>% &nbsp;&nbsp;
+              🤔 <span x-text="s.neutral"></span>%
+            </p>
+          </div>
+          <div class="flex w-40 h-2 bg-gray-200 rounded overflow-hidden border border-gray-300">
+            <div class="bg-green-500" :style="'width:' + s.yes + '%'"></div>
+            <div class="bg-red-500" :style="'width:' + s.no + '%'"></div>
+            <div class="bg-yellow-400" :style="'width:' + s.neutral + '%'"></div>
+          </div>
+        </div>
+      </template>
+    </div>
+  </section>
+
+  <!-- INSIGHTS GRID -->
+  <section class="grid md:grid-cols-2 gap-6">
+    <template x-for="box in boxes">
+      <div class="bg-white border border-gray-300 rounded-2xl shadow-lg p-6">
+        <h3 class="font-extrabold text-lg mb-3" x-text="box.title"></h3>
+        <template x-if="box.list">
+          <ul class="font-semibold text-sm space-y-1">
+            <template x-for="i in box.list">
+              <li x-text="'• ' + i"></li>
+            </template>
+          </ul>
+        </template>
+        <template x-if="box.text">
+          <p class="text-sm italic font-semibold text-gray-700" x-text="box.text"></p>
+        </template>
+      </div>
+    </template>
+  </section>
+
+  <!-- TREND GRAPH -->
+  <section class="bg-white border border-gray-300 rounded-2xl shadow-lg p-8">
+    <h2 class="text-2xl md:text-3xl font-extrabold mb-8 text-center flex justify-center gap-2">
+      📉 Opinion Trend — 30 Days
+    </h2>
+
+    <div class="relative h-64">
+      <svg viewBox="0 0 1000 300" class="w-full h-full">
+        <line x1="50" y1="250" x2="950" y2="250" stroke="#ddd" stroke-width="2"/>
+        <line x1="50" y1="200" x2="950" y2="200" stroke="#ddd" stroke-dasharray="5,5"/>
+        <line x1="50" y1="150" x2="950" y2="150" stroke="#ddd" stroke-dasharray="5,5"/>
+        <line x1="50" y1="100" x2="950" y2="100" stroke="#ddd" stroke-dasharray="5,5"/>
+        <line x1="50" y1="50" x2="950" y2="50" stroke="#ddd" stroke-dasharray="5,5"/>
+
+        <polyline stroke="#10b981" stroke-width="4" fill="none"
+                  points="50,145 150,148 250,143 350,140 450,135 550,132 650,125 750,118 850,112 950,105"/>
+        <polyline stroke="#ef4444" stroke-width="4" fill="none"
+                  points="50,195 150,193 250,198 350,200 450,203 550,205 650,210 750,215 850,218 950,220"/>
+        <polyline stroke="#f59e0b" stroke-width="4" fill="none"
+                  points="50,225 150,222 250,223 350,220 450,218 550,220 650,222 750,223 850,225 950,228"/>
+      </svg>
+    </div>
+  </section>
+</main>
+
+<!-- DATA + TEXT -->
+<script>
+function pulse(){
+  return {
+    lang:'en',
+    national:{yes:63,no:25,neutral:12},
+
+    socials:[
+      {name:'Twitter/X',icon:'🐦',pos:62,note:'Trending: #OneNationOneElection, #ElectionReform',bg:'bg-blue-50'},
+      {name:'Instagram',icon:'📸',pos:58,note:'Youth engagement high on infographics',bg:'bg-pink-50'},
+      {name:'Facebook',icon:'📘',pos:55,note:'Older demographics showing measured support',bg:'bg-indigo-50'},
+      {name:'LinkedIn',icon:'💼',pos:73,note:'Professionals favor governance efficiency',bg:'bg-purple-50'},
+    ],
+
+    states:[
+      {name:'Uttar Pradesh',yes:67,no:20,neutral:13},
+      {name:'Maharashtra',yes:62,no:27,neutral:11},
+      {name:'Karnataka',yes:60,no:30,neutral:10},
+      {name:'Delhi',yes:55,no:32,neutral:13},
+      {name:'Tamil Nadu',yes:42,no:46,neutral:12},
+      {name:'Goa',yes:48,no:40,neutral:12}
+    ],
+
+    boxes:[
+      {title:'🔍 Key Insights',list:[
+        'High support in UP, MAH & KA',
+        'Youth overwhelmingly in favour',
+        'Cost-saving narrative strongest motive'
+      ]},
+      {title:'⚠️ Top Concerns',list:[
+        'Fear of federal imbalance',
+        'Implementation complexity',
+        'Rural trust gap'
+      ]},
+      {title:'👥 Citizen Voice',text:'“Ek saath chunav accha he — par planning solid honi chahiye.” — Citizen, Karnataka'},
+      {title:'📈 Trend Shift',text:'Support up by +4% this month nationwide'},
+    ],
+
+    text:{
+      en:{national:'National Opinion Pulse',yes:'Support',no:'Oppose',neutral:'Neutral',states:'State-wise Sentiment'},
+      hi:{national:'राष्ट्रीय जनमत',yes:'समर्थन',no:'विरोध',neutral:'तटस्थ',states:'राज्यवार जनमत'},
+    },
+    t(k){return this.text[this.lang][k]}
+  }
+}
+</script>
+
+</body>
+</html>
